@@ -1,7 +1,11 @@
-﻿using Bookshop.Models;
+﻿using Bookshop.Components.Contexts;
+using Bookshop.Components.Schemas;
 
-namespace Bookshop
+namespace Bookshop.Components.DbInit
 {
+    /// <summary>
+    /// Populates the given BookshopContext with the initial set of data, and saves the changes
+    /// </summary>
     internal class DbInitialiser
     {
         internal static void Initialise(BookshopContext dbContext)

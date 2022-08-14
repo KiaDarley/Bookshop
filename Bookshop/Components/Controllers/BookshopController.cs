@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Bookshop.Components.Contexts;
+using Bookshop.Components.Schemas;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Bookshop.Models;
 
 namespace Bookshop.Controllers
 {
@@ -21,6 +17,7 @@ namespace Bookshop.Controllers
         }
 
         // GET: api/Bookshop
+        //GET orders by Title by default
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
@@ -28,10 +25,11 @@ namespace Bookshop.Controllers
           {
               return NotFound();
           }
-            return await _context.Books.ToListAsync();
+            return await _context.Books.OrderBy(i => i.Title).ToListAsync();
         }
 
         // GET: api/Bookshop/5
+        // Returns book with specific ID, if that ID exists
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
@@ -50,7 +48,7 @@ namespace Bookshop.Controllers
         }
 
         // PUT: api/Bookshop/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Edits an entry with a specific ID to match the given Book
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBook(int id, Book book)
         {
@@ -81,7 +79,7 @@ namespace Bookshop.Controllers
         }
 
         // POST: api/Bookshop
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Adds a new book to the database
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
@@ -96,6 +94,7 @@ namespace Bookshop.Controllers
         }
 
         // DELETE: api/Bookshop/5
+        // Deletes a Book with the specific ID, if that ID exists
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
@@ -115,6 +114,7 @@ namespace Bookshop.Controllers
             return NoContent();
         }
 
+        //Bool if the given int ID exists in the existing set of books
         private bool BookExists(int id)
         {
             return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();

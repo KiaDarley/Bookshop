@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Bookshop.Models;
-using Bookshop;
+using Bookshop.Components.Contexts;
+using Bookshop.Components.DbInit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,21 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<BookshopContext>(opt =>
     opt.UseInMemoryDatabase("BookList"));
-builder.Services.AddScoped<DbInitialiser>();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new() { Title = "Bookshop", Version = "v1" });
-//});
+builder.Services.AddScoped<DbInitialiser>(); //Adds a DbInitialiser connection, so that data may be seeded
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (builder.Environment.IsDevelopment())
 {
-    app.UseItToSeedSqlServer();
+    app.UseItToSeedSqlServer(); //Calls the method to populate the DbSet with the initial data
     app.UseDeveloperExceptionPage();
-    //app.UseSwagger();
-    //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bookshop v1"));
 }
 
 app.UseHttpsRedirection();
